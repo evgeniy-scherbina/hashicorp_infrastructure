@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+package division;
+option go_package = "pb/division";
+
+message DivRequest {
+    int64 a = 1 [json_name = "a"];
+    int64 b = 2 [json_name = "b"];
+}
+
+message DivResponse {
+    int64 rez = 1 [json_name = "rez"];
+}
+
+service DivisionService {
+    rpc Div(DivRequest) returns (DivResponse) {}
+}

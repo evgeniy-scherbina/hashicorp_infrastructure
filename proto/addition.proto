@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+package addition;
+option go_package = "pb/addition";
+
+message AddRequest {
+    int64 a = 1 [json_name = "a"];
+    int64 b = 2 [json_name = "b"];
+}
+
+message AddResponse {
+    int64 rez = 1 [json_name = "rez"];
+}
+
+service AdditionService {
+    rpc Add(AddRequest) returns (AddResponse) {}
+}

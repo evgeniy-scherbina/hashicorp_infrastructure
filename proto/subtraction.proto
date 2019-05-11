@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+package subtraction;
+option go_package = "pb/subtraction";
+
+message SubRequest {
+    int64 a = 1 [json_name = "a"];
+    int64 b = 2 [json_name = "b"];
+}
+
+message SubResponse {
+    int64 rez = 1 [json_name = "rez"];
+}
+
+service SubService {
+    rpc Sub(SubRequest) returns (SubResponse) {}
+}

@@ -1,0 +1,147 @@
+version: '3.2'
+services:
+  # --------------------------------
+  addition-service:
+    container_name: addition
+    image: hashicorp-infrastructure-services
+    build:
+      context: .
+      dockerfile: Dockerfile
+    labels:
+    - SERVICE_9090_NAME=addition-service-rpc
+    - SERVICE_9090_TAGS=grpc
+    depends_on:
+    - consul
+#    - mongo
+    networks:
+    - default
+    dns: 172.25.1.30
+    ports:
+#    - 8081
+    - 9090
+    restart: always
+    command: >
+      addition-service
+
+  # --------------------------------
+  subtraction-service:
+    container_name: subtraction
+    image: hashicorp-infrastructure-services
+    build:
+      context: .
+      dockerfile: Dockerfile
+    labels:
+    - SERVICE_9090_NAME=subtraction-service-rpc
+    #    - SERVICE_9090_TAGS=grpc
+    #    depends_on:
+    #    - consul
+    #    - mongo
+    networks:
+    - default
+    #    dns: 172.25.1.30
+    ports:
+    #    - 8081
+    - 9090
+    restart: always
+    command: >
+      subtraction-service
+
+  # --------------------------------
+  multiplication-service:
+    container_name: multiplication
+    image: hashicorp-infrastructure-services
+    build:
+      context: .
+      dockerfile: Dockerfile
+    labels:
+    - SERVICE_9090_NAME=multiplication-service-rpc
+    #    - SERVICE_9090_TAGS=grpc
+    #    depends_on:
+    #    - consul
+    #    - mongo
+    networks:
+    - default
+    #    dns: 172.25.1.30
+    ports:
+    #    - 8081
+    - 9090
+    restart: always
+    command: >
+      multiplication-service
+
+  # --------------------------------
+  division-service:
+    container_name: division
+    image: hashicorp-infrastructure-services
+    build:
+      context: .
+      dockerfile: Dockerfile
+    labels:
+    - SERVICE_9090_NAME=division-service-rpc
+    #    - SERVICE_9090_TAGS=grpc
+    #    depends_on:
+    #    - consul
+    #    - mongo
+    networks:
+    - default
+    #    dns: 172.25.1.30
+    ports:
+    #    - 8081
+    - 9090
+    restart: always
+    command: >
+      division-service
+
+  # --- Service discovery
+  consul:
+    image: consul:1.3.0
+    container_name: consul
+    environment:
+    - CONSUL_ALLOW_PRIVILEGED_PORTS=
+    networks:
+      default:
+        ipv4_address: 172.25.1.30
+    ports:
+    - "8500:8500"
+    - "53/udp"
+    command: consul agent -dev -recursor=8.8.8.8 -client=0.0.0.0 -dns-port=53
+
+  # --- Service for automatic registration of all services in consul
+  registrator:
+    image: gliderlabs/registrator:v7
+    container_name: registrator
+    depends_on:
+    - consul
+    networks:
+    - default
+    volumes:
+    - /var/run/docker.sock:/tmp/docker.sock
+    command: -cleanup=true -retry-attempts=10 -retry-interval=1000 -internal consul://consul:8500
+
+  # -- Grpc load-balancer implementation
+  grpclb:
+    image: lightningnetwork/grpclb-alpine:20190327.1929.59
+    container_name: grpclb
+    environment:
+    - GRPC_GO_LOG_SEVERITY_LEVEL=info
+    labels:
+    - SERVICE_8383_NAME=grpclb
+    - SERVICE_8383_TAGS=tcp
+    depends_on:
+    - consul
+    networks:
+    - default
+    ports:
+    - 8383
+    command: -consul consul:8500
+
+volumes:
+  rpc:
+    driver: local
+
+networks:
+  default:
+    ipam:
+      driver: default
+      config:
+      - subnet: 172.25.0.1/16

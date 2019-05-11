@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+package multiplication;
+option go_package = "pb/multiplication";
+
+message MulRequest {
+    int64 a = 1 [json_name = "a"];
+    int64 b = 2 [json_name = "b"];
+}
+
+message MulResponse {
+    int64 rez = 1 [json_name = "rez"];
+}
+
+service MultiplicationService {
+    rpc Mul(MulRequest) returns (MulResponse) {}
+}
