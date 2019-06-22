@@ -41,11 +41,11 @@ job "example" {
         port_map {
           db = 6379
         }
-      }
 
-      args = [
-        "addition-service"
-      ]
+        args = [
+          "addition-service"
+        ]
+      }
 
       resources {
         cpu    = 500 # 500 MHz
