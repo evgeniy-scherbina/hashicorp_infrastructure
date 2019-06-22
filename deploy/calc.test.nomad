@@ -29,9 +29,9 @@ job "example" {
       mode = "fail"
     }
 
-    ephemeral_disk {
-      size = 300
-    }
+//    ephemeral_disk {
+//      size = 5
+//    }
 
     task "addition" {
       driver = "docker"
@@ -42,6 +42,10 @@ job "example" {
           db = 6379
         }
       }
+
+      args = [
+        "addition-service"
+      ]
 
       resources {
         cpu    = 500 # 500 MHz
