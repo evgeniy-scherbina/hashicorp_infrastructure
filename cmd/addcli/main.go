@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"flag"
 	"log"
 
 	"google.golang.org/grpc"
@@ -25,11 +26,14 @@ func main() {
 	//}
 
 	// grpcClient := pb.NewAdditionServiceClient(conn)
+	additionServiceAddress := flag.String("add_addr", grpclbAddress, "")
+	flag.Parse()
+
 	ctxb := context.Background()
 
 	// ----------------------------------------------------------------------------------------------------
 	{
-		grpcClient, err := addClient.NewAdditionServiceClient(ctxb, grpclbAddress)
+		grpcClient, err := addClient.NewAdditionServiceClient(ctxb, *additionServiceAddress)
 		if err != nil {
 			log.Fatal(err)
 		}

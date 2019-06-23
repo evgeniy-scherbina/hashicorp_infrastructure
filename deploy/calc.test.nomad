@@ -39,7 +39,7 @@ job "example" {
       config {
         image = "scherbina/hashicorp-infrastructure-services:v0.0.1"
         port_map {
-          db = 6379
+          grpc = 9090
         }
 
         args = [
@@ -52,7 +52,7 @@ job "example" {
         memory = 256 # 256MB
         network {
           mbits = 10
-          port "db" {}
+          port "grpc" {}
         }
       }
 //
