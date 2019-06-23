@@ -1,4 +1,4 @@
-job "example" {
+job "calc" {
   datacenters = ["dc1"]
 
   type = "service"
@@ -53,7 +53,7 @@ job "example" {
         network {
           mbits = 10
           port "grpc" {
-            static = "8889"
+            static = "9090"
           }
         }
       }
