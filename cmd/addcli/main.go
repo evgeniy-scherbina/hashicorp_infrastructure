@@ -49,6 +49,8 @@ func main() {
 		log.Println(resp.Rez)
 	}
 
+	return
+
 	// ----------------------------------------------------------------------------------------------------
 	{
 		grpcClient, err := subClient.NewSubtractionServiceClient(ctxb, grpclbAddress)

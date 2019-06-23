@@ -52,7 +52,9 @@ job "example" {
         memory = 256 # 256MB
         network {
           mbits = 10
-          port "grpc" {}
+          port "grpc" {
+            static = "8889"
+          }
         }
       }
 //
